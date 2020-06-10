@@ -12,5 +12,5 @@ def fib6_gen(n: int) -> Generator[int, None, None]:
 if __name__ == '__main__':
     generator = fib6_gen(50)
 
-    for i in next(generator):
-        print()
+    for i in generator:
+        print(i)
