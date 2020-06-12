@@ -1,0 +1,2 @@
+# Search problems
+- Linear search
