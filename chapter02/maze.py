@@ -4,7 +4,7 @@ from typing import List, NamedTuple, Callable, Optional
 import random
 from math import sqrt
 #from generic_search import dfs, bfs, node_to_path, astar, Node
-from chapter02.generic_search import dfs, Node, node_to_path
+from chapter02.generic_search import dfs, Node, node_to_path, bfs, astar
 
 
 class Cell(str, Enum):
@@ -79,6 +79,21 @@ class Maze:
         return output
 
 
+def euclidean_distance(goal: MazeLocation) -> Callable[[MazeLocation], float]:
+    def distance(ml: MazeLocation) -> float:
+        xdist: int = ml.column - goal.column
+        ydist: int = ml.row - goal.row
+        return sqrt((xdist*xdist)+(ydist*ydist))
+    return distance
+
+
+def manhattan_distance(goal: MazeLocation) -> Callable[[MazeLocation], float]:
+    def distance(ml: MazeLocation) -> float:
+        xdist: int = abs(ml.column - goal.column)
+        ydist: int = abs(ml.row - goal.row)
+        return xdist + ydist
+    return distance
+
 if __name__ == '__main__':
     maze: Maze = Maze()
     print(maze)
@@ -86,7 +101,30 @@ if __name__ == '__main__':
     if solution1 is None:
         print("No solution found using depth-first search!")
     else:
+        # Depth-first
+        print("DEPTH-FIRST")
         path1: List[MazeLocation] = node_to_path(solution1)
         maze.mark(path1)
         print(maze)
         maze.clear(path1)
+
+        solution2: Optional[Node[MazeLocation]] = bfs(maze.start, maze.goal_test, maze.successors)
+        if solution2 is None:
+            print("No solution found using breadth-first search!")
+        else:
+            print("BREADTH-FIRST")
+            path2: List[MazeLocation] = node_to_path(solution2)
+            maze.mark(path2)
+            print(maze)
+            maze.clear(path2)
+
+        # Test A*
+        distance: Callable[[MazeLocation], float] = manhattan_distance(maze.goal)
+        solution3: Optional[Node[MazeLocation]] = astar(maze.start, maze.goal_test, maze.successors, distance)
+        if solution3 is None:
+            print("No solution found using A*")
+        else:
+            print("A*")
+            path3: List[MazeLocation] = node_to_path(solution3)
+            maze.mark(path3)
+            print(maze)
