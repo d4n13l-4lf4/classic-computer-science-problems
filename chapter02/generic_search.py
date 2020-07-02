@@ -71,7 +71,7 @@ class Stack(Generic[T]):
 class Queue(Generic[T]):
 
     def __init__(self) -> None:
-        self._container: Deque[T] = Deque()
+        self._container: Deque[T] = Deque[T]()
 
     @property
     def empty(self) -> bool:
