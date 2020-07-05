@@ -22,7 +22,7 @@ if __name__ == '__main__':
         if board.is_draw:
             print("Draw!")
             break
-        computer_move: Move = find_best_move(board, 3)
+        computer_move: Move = find_best_move(board, 5)
         print(f"Computer move is {computer_move}")
         board = board.move(computer_move)
         print(board)
